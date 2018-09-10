@@ -1,6 +1,6 @@
 {
   "name": "service-worker-router",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "An elegant and fast URL router for services workers (and standalone use)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
