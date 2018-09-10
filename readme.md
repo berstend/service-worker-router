@@ -281,6 +281,7 @@ addEventListener('fetch', event => {
   - In service workers one needs to respond with a definitive [Response] object (when responding to a fetch event), so this paradigm doesn't really fit here.
 - No ES5 transpilation
   - This module is targeting modern JavaScript environments, by purpose. If you need to use the router in older environments it's your responsibility to transpile your project (and this dependency) to e.g. ES5 using Babel.
+  - You might need to polyfill [URL] in certain environments (Node.js < 10, IE), see [compat](https://caniuse.com/#feat=url). One way to do that would be `universal-url`.
 
 ## See also
 
