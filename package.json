@@ -9,7 +9,7 @@
     "build": "rimraf dist && tsc",
     "test": "ava-ts -v",
     "prepublish": "npm run build",
-    "release": "np"
+    "release": "yarn publish"
   },
   "keywords": [
     "service worker",
@@ -26,7 +26,8 @@
     "ava-ts": "^0.25.1",
     "np": "^3.0.4",
     "ts-node": "^7.0.1",
-    "typescript": "^3.0.3"
+    "typescript": "^3.0.3",
+    "universal-url": "^1.0.1"
   },
   "dependencies": {
     "url-pattern": "^1.0.3"

@@ -1,5 +1,18 @@
 import UrlPattern from 'url-pattern';
 
+// WHATWG URL API
+// Supported in webworkers
+// Supported in Node > v10.0.0
+// Supported in modern browsers
+// https://nodejs.org/api/url.html#url_the_whatwg_url_api
+// https://caniuse.com/#feat=url
+try {
+  typeof URL === 'function'
+} catch (error) {
+  console.warn('WHATWG URL API not available, shim required.')
+  require('universal-url').shim()
+}
+
 const patternOpts = {
   segmentNameCharset: 'a-zA-Z0-9_-',
   segmentValueCharset: 'a-zA-Z0-9@.+-_'

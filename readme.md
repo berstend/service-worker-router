@@ -7,7 +7,7 @@
 I was unable to find a modern router with the following features:
 
 - **Framework agnostic** and [service worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) support
-  - Most routers are intertwined with a specifc web server or framework, this one is agnostic and can be used everywhere (Node.js, browsers, workers). See the [standalone](#example-standalone) example.
+  - Most routers are intertwined with a specific web server or framework, this one is agnostic and can be used everywhere (Node.js, browsers, workers). See the [standalone](#example-standalone) example.
 - **TypeScript** (and JavaScript) **support**
   - Even when not using TypeScript there's the benefit of better code editor tooling (like autocomplete) for the developer.
 - **Match the path or the full URL**
