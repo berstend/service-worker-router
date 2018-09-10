@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import Router from '../src/index'
+import { Router } from '../src/index'
 
 test('is class', t => {
   t.is(typeof Router, 'function')

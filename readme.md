@@ -28,13 +28,13 @@ npm install --save service-worker-router
 
 ```typescript
 // TypeScript
-import Router, { HandlerContext } from 'service-worker-router'
+import { Router, HandlerContext } from 'service-worker-router'
 
 // ES6 JavaScript and Babel
-import Router from 'service-worker-router'
+import { Router } from 'service-worker-router'
 
 // Legacy JavaScript and Node.js
-const Router = require('service-worker-router').default
+const { Router } = require('service-worker-router')
 ```
 
 ## Example (service worker)
@@ -68,6 +68,8 @@ addEventListener('fetch', event => {
 ```
 
 ### TypeScript
+
+Same as the above but with optional types:
 
 ```typescript
 // Instantiate a new router

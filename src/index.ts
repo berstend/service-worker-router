@@ -1,4 +1,4 @@
-import UrlPattern from 'url-pattern';
+import UrlPattern from 'url-pattern'
 
 const patternOpts = {
   segmentNameCharset: 'a-zA-Z0-9_-',
@@ -30,41 +30,79 @@ export interface HandlerContext extends RouteResult {
   request: FetchEvent['request']
 }
 
-class Router {
+export class Router {
   private routes: Array<Route> = []
 
-  public all(pattern: string | UrlPattern, handler: HandlerFunction, options: RouteOptions = {}): Router {
+  public all (
+    pattern: string | UrlPattern,
+    handler: HandlerFunction,
+    options: RouteOptions = {}
+  ): Router {
     return this.addRoute(pattern, handler, { ...options, method: '' })
   }
-  public get(pattern: string | UrlPattern, handler: HandlerFunction, options: RouteOptions = {}): Router {
+  public get (
+    pattern: string | UrlPattern,
+    handler: HandlerFunction,
+    options: RouteOptions = {}
+  ): Router {
     return this.addRoute(pattern, handler, { ...options, method: 'GET' })
   }
-  public post(pattern: string | UrlPattern, handler: HandlerFunction, options: RouteOptions = {}): Router {
+  public post (
+    pattern: string | UrlPattern,
+    handler: HandlerFunction,
+    options: RouteOptions = {}
+  ): Router {
     return this.addRoute(pattern, handler, { ...options, method: 'POST' })
   }
-  public put(pattern: string | UrlPattern, handler: HandlerFunction, options: RouteOptions = {}): Router {
+  public put (
+    pattern: string | UrlPattern,
+    handler: HandlerFunction,
+    options: RouteOptions = {}
+  ): Router {
     return this.addRoute(pattern, handler, { ...options, method: 'PUT' })
   }
-  public patch(pattern: string | UrlPattern, handler: HandlerFunction, options: RouteOptions = {}): Router {
+  public patch (
+    pattern: string | UrlPattern,
+    handler: HandlerFunction,
+    options: RouteOptions = {}
+  ): Router {
     return this.addRoute(pattern, handler, { ...options, method: 'PATCH' })
   }
-  public delete(pattern: string | UrlPattern, handler: HandlerFunction, options: RouteOptions = {}): Router {
+  public delete (
+    pattern: string | UrlPattern,
+    handler: HandlerFunction,
+    options: RouteOptions = {}
+  ): Router {
     return this.addRoute(pattern, handler, { ...options, method: 'DELETE' })
   }
-  public head(pattern: string | UrlPattern, handler: HandlerFunction, options: RouteOptions = {}): Router {
+  public head (
+    pattern: string | UrlPattern,
+    handler: HandlerFunction,
+    options: RouteOptions = {}
+  ): Router {
     return this.addRoute(pattern, handler, { ...options, method: 'HEAD' })
   }
-  public options(pattern: string | UrlPattern, handler: HandlerFunction, options: RouteOptions = {}): Router {
+  public options (
+    pattern: string | UrlPattern,
+    handler: HandlerFunction,
+    options: RouteOptions = {}
+  ): Router {
     return this.addRoute(pattern, handler, { ...options, method: 'OPTIONS' })
   }
 
-  private addRoute(pattern: string | UrlPattern, handler: HandlerFunction, options: RouteOptions = {}): Router {
-    if (!(pattern instanceof UrlPattern)) pattern = new UrlPattern(pattern, patternOpts)
+  private addRoute (
+    pattern: string | UrlPattern,
+    handler: HandlerFunction,
+    options: RouteOptions = {}
+  ): Router {
+    if (!(pattern instanceof UrlPattern)) {
+      pattern = new UrlPattern(pattern, patternOpts)
+    }
     this.routes.push({ pattern, handler, options })
     return this
   }
 
-  public findRoute(url: URL | string, method: string): RouteResult | null {
+  public findRoute (url: URL | string, method: string): RouteResult | null {
     if (!(url instanceof URL)) {
       url = url.startsWith('/') ? new URL(`http://domain${url}`) : new URL(url)
     }
@@ -76,24 +114,26 @@ class Router {
     return null
   }
 
-  public findRouteForRequest(request: FetchEvent['request']): RouteResult | null {
+  public findRouteForRequest (
+    request: FetchEvent['request']
+  ): RouteResult | null {
     return this.findRoute(request.url, request.method)
   }
 
-  public handleRequest(event: FetchEvent): Promise<Response | any | void> | null {
+  public handleRequest (
+    event: FetchEvent
+  ): Promise<Response | any | void> | null {
     const route = this.findRouteForRequest(event.request)
     if (!route) return null
     return route.handler({ ...route, event, request: event.request })
   }
 
-  public watch(event: FetchEvent) {
+  public watch (event: FetchEvent) {
     const handler = this.handleRequest(event)
     if (handler) event.respondWith(handler)
   }
 
-  public clear() {
+  public clear () {
     this.routes.length = 0
   }
 }
-
-export default Router

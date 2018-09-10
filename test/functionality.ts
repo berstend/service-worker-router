@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import Router from '../src/index'
+import { Router } from '../src/index'
 
 test('should find route with wildcard', async t => {
   const router = new Router()
@@ -42,13 +42,23 @@ test('should find route with path params', async t => {
 test('should find route with full url', async t => {
   const router = new Router()
 
-  router.delete('(http(s)\\://)npm.runkit.com/url-pattern/api/users(/:id)', async () => 'yup', { matchUrl: true })
+  router.delete(
+    '(http(s)\\://)npm.runkit.com/url-pattern/api/users(/:id)',
+    async () => 'yup',
+    { matchUrl: true }
+  )
 
-  const route1 = router.findRoute('https://npm.runkit.com/url-pattern/api/users/20', 'DELETE')
+  const route1 = router.findRoute(
+    'https://npm.runkit.com/url-pattern/api/users/20',
+    'DELETE'
+  )
   t.true(route1 instanceof Object)
   t.deepEqual(route1 && route1.params && route1.params.id, '20')
 
-  const route2 = router.findRoute('https://npm.runkit.com/url-pattern/api/users/20', 'POST')
+  const route2 = router.findRoute(
+    'https://npm.runkit.com/url-pattern/api/users/20',
+    'POST'
+  )
   t.is(route2, null)
 })
 
@@ -61,6 +71,9 @@ test('should not find route', async t => {
   router.get('/foo4', async () => 'yup')
   router.get('/foo5', async () => 'yup')
 
-  const route = router.findRoute('https://npm.runkit.com/url-pattern/api/users/20', 'GET')
+  const route = router.findRoute(
+    'https://npm.runkit.com/url-pattern/api/users/20',
+    'GET'
+  )
   t.is(route, null)
 })
