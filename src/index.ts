@@ -1,15 +1,12 @@
 import UrlPattern from 'url-pattern';
 
 // WHATWG URL API
-// Supported in webworkers
+// Supported in workers
 // Supported in Node > v10.0.0
 // Supported in modern browsers
 // https://nodejs.org/api/url.html#url_the_whatwg_url_api
 // https://caniuse.com/#feat=url
-try {
-  typeof URL === 'function'
-} catch (error) {
-  console.warn('WHATWG URL API not available, shim required.')
+if (typeof URL === 'undefined') {
   require('universal-url').shim()
 }
 
