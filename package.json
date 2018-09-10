@@ -11,6 +11,9 @@
     "prepublish": "npm run build",
     "release": "yarn publish"
   },
+  "files": [
+    "/dist"
+  ],
   "keywords": [
     "service worker",
     "router",
