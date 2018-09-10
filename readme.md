@@ -1,4 +1,4 @@
-# service-worker-router <!-- [![ ](https://img.shields.io/bundlephobia/min/service-worker-router.svg)](https://bundlephobia.com/result?p=service-worker-router) --> [![ ](https://img.shields.io/npm/v/service-worker-router.svg)](https://www.npmjs.com/package/service-worker-router)
+# service-worker-router [![ ](https://travis-ci.org/berstend/service-worker-router.svg?branch=master)](https://travis-ci.org/berstend/service-worker-router)<!-- [![ ](https://img.shields.io/bundlephobia/min/service-worker-router.svg)](https://bundlephobia.com/result?p=service-worker-router) --> [![ ](https://img.shields.io/npm/v/service-worker-router.svg)](https://www.npmjs.com/package/service-worker-router)
 
 > An elegant and fast URL router for service workers (and standalone use)
 
