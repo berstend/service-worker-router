@@ -1,6 +1,6 @@
 # service-worker-router [![ ](https://img.shields.io/bundlephobia/min/service-worker-router.svg)](https://bundlephobia.com/result?p=service-worker-router) [![ ](https://img.shields.io/npm/v/service-worker-router.svg)](https://www.npmjs.com/package/service-worker-router)
 
-> An elegant and fast URL router for services workers (and standalone use)
+> An elegant and fast URL router for service workers (and standalone use)
 
 ## Yet another router? 😄
 
@@ -41,7 +41,7 @@ const Router = require('service-worker-router').default
 
 ### JavaScript
 
-```es6
+```js
 // Instantiate a new router
 const router = new Router()
 
@@ -100,7 +100,7 @@ addEventListener('fetch', (event: FetchEvent) => {
 
 This router can be used on it's own using `router.findRoute`, service worker usage is optional.
 
-```es6
+```js
 const router = new Router()
 
 const user = async () => new Response('hey there')
@@ -120,7 +120,7 @@ A route pattern can be a string or a UrlPattern instance, for greater flexibilit
 
 #### Examples
 
-```es6
+```js
 // will match everything
 router.all('*', handler)
 
@@ -146,7 +146,7 @@ By default the router will only match against the `/path` of a URL. To test agai
 
 #### Examples
 
-```es6
+```js
 // test against full url, not only path
 router.post('(http(s)\\://)api.example.com/users(/:id)', handler, {
   matchUrl: true
@@ -192,7 +192,7 @@ All methods will return the router instance, for optional chaining.
 
 The handler function for a route is expected to be an `async` function (or `Promise`).
 
-```es6
+```js
 // See the HandlerContext interface below for all available params
 const handler = async ({ request, params }) => {
   return new Response('Hello')
@@ -220,7 +220,7 @@ interface HandlerContext {
 
 Matches a supplied URL and HTTP method against the registered routes. `url` can be a string (path or full URL) or [URL] instance.
 
-```es6
+```js
 router.get('/user/:id', handler)
 
 router.findRoute('/user/1337', 'GET')
@@ -242,7 +242,7 @@ interface RouteResult {
 
 Convenience function to match a [Request] object (e.g. `event.request`) against the registered routes. Will return `null` if no matching route was found.
 
-```es6
+```js
 addEventListener('fetch', event => {
   const route = router.findRouteForRequest(event.request)
   console.log(route)
@@ -254,7 +254,7 @@ addEventListener('fetch', event => {
 
 Convenience function to match a [FetchEvent] object against the registered routes and call it's handler function automatically.
 
-```es6
+```js
 addEventListener('fetch', event => {
   const handlerPromise = router.handleRequest(event)
   if (handlerPromise) {
@@ -269,7 +269,7 @@ addEventListener('fetch', event => {
 
 Convenience function to match a [FetchEvent] object against the registered routes. If a route matches it's handler will be called automatically with `event.respondWith(handler)`. If no route matches nothing happens. :-)
 
-```es6
+```js
 addEventListener('fetch', event => {
   router.watch(event)
 })
