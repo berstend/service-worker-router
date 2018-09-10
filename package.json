@@ -1,0 +1,32 @@
+{
+  "name": "service-worker-router",
+  "version": "1.2.3",
+  "description": "Run multiple promises in parallel with a strategy",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": "berstend/service-worker-router",
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "test": "ava-ts -v",
+    "prepublish": "npm run build"
+  },
+  "keywords": [
+    "service worker",
+    "router",
+    "routing",
+    "cloudflare",
+    "worker"
+  ],
+  "author": "berstend",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^10.9.4",
+    "ava": "^0.25.0",
+    "ava-ts": "^0.25.1",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.0.3"
+  },
+  "dependencies": {
+    "url-pattern": "^1.0.3"
+  }
+}
