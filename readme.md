@@ -15,7 +15,7 @@ I was unable to find a modern router with the following features:
   - Most routers only support matching a `/path`, with service workers it's sometimes necessary to use the full URL as well.
 - **Elegant pattern matching**
   - Life's too short to debug regexes. :-)
-- Also: Lightweight (< 100 LOC), tested, minimal overhead
+- Also: Lightweight (~100 LOC), tested, minimal overhead
 
 ## Installation
 
@@ -106,11 +106,11 @@ This router can be used on it's own using `router.findRoute`, service worker usa
 ```js
 const router = new Router()
 
-const user = async ({ params }) => `Hey ${params.name}!`
+const user = async () => `Hey there!`
 router.get('/user/:name', user)
 
-router.findRoute('/user/1337', 'GET')
-// => { params: { name: '1337' }, handler: [AsyncFunction: user],  url...
+router.findRoute('/user/bob', 'GET')
+// => { params: { name: 'bob' }, handler: [AsyncFunction: user],  url...
 ```
 
 ## Patterns
