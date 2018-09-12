@@ -8,6 +8,7 @@ I was unable to find a modern router with the following features:
 
 - **Framework agnostic** and [service worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) support
   - Most routers are intertwined with a specific web server or framework, this one is agnostic and can be used everywhere (Node.js, browsers, workers). See the [standalone](#example-standalone) example.
+  - The router is used in production with [Cloudflare Workers].
 - **TypeScript** (and JavaScript) **support**
   - Even when not using TypeScript there's the benefit of better code editor tooling (like autocomplete) for the developer.
 - **Match the path or the full URL**
@@ -105,11 +106,11 @@ This router can be used on it's own using `router.findRoute`, service worker usa
 ```js
 const router = new Router()
 
-const user = async () => new Response('hey there')
-router.get('/user/:id', user)
+const user = async ({ params }) => `Hey ${params.name}!`
+router.get('/user/:name', user)
 
 router.findRoute('/user/1337', 'GET')
-// => { params: { id: '1337' }, handler: [AsyncFunction: user],  url...
+// => { params: { name: '1337' }, handler: [AsyncFunction: user],  url...
 ```
 
 ## Patterns
@@ -298,3 +299,5 @@ MIT
 [request]: https://developer.mozilla.org/en-US/docs/Web/API/Request 'Request'
 [response]: https://developer.mozilla.org/en-US/docs/Web/API/Response 'Response'
 [fetchevent]: https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent 'FetchEvent'
+[Cloudflare Workers]: https://www.cloudflare.com/products/cloudflare-workers/ 'Cloudflare Workers'
+
