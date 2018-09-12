@@ -115,7 +115,7 @@ router.findRoute('/user/bob', 'GET')
 
 ## Patterns
 
-The router is using the excellent [`url-pattern`](https://github.com/snd/) module (it's sole dependency).
+The router is using the excellent [`url-pattern`](https://github.com/snd/url-pattern) module (it's sole dependency).
 
 Patterns can have optional segments and wildcards.
 
@@ -164,7 +164,7 @@ router.findRoute('http://mail.google.com/mail', 'GET')
 // => { params: {subdomain: 'mail', domain: 'google', tld: 'com', _: 'mail'}, handler: [AsyncFunction], ...
 ```
 
-Refer to the [`url-pattern`](https://github.com/snd/) documentation and [it's tests](https://github.com/snd/url-pattern/blob/master/test/match-fixtures.coffee) for more information and examples regarding pattern matching.
+Refer to the [`url-pattern`](https://github.com/snd/url-pattern) documentation and [it's tests](https://github.com/snd/url-pattern/blob/master/test/match-fixtures.coffee) for more information and examples regarding pattern matching.
 
 ## HTTP methods
 
