@@ -15,7 +15,7 @@ I was unable to find a modern router with the following features:
   - Most routers only support matching a `/path`, with service workers it's sometimes necessary to use the full URL as well.
 - **Elegant pattern matching**
   - Life's too short to debug regexes. :-)
-- Also: Lightweight (**8KB**, ~100 LOC), tested, supports [tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking) and [ES modules](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/)
+- Also: Lightweight (**8KB**, ~100 LOC), tested, supports [tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking) and [ES modules](https://developers.google.com/web/fundamentals/primers/modules)
 
 ## Installation
 
