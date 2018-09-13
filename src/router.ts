@@ -1,5 +1,8 @@
 import UrlPattern from 'url-pattern'
 
+// https://basarat.gitbooks.io/typescript/docs/tips/barrel.html
+export { UrlPattern }
+
 const patternOpts = {
   segmentNameCharset: 'a-zA-Z0-9_-',
   segmentValueCharset: 'a-zA-Z0-9@.+-_'
