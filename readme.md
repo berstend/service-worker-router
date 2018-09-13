@@ -1,4 +1,4 @@
-# service-worker-router [![ ](https://travis-ci.org/berstend/service-worker-router.svg?branch=master)](https://travis-ci.org/berstend/service-worker-router)<!-- [![ ](https://img.shields.io/bundlephobia/min/service-worker-router.svg)](https://bundlephobia.com/result?p=service-worker-router) --> [![ ](https://img.shields.io/npm/v/service-worker-router.svg)](https://www.npmjs.com/package/service-worker-router)
+# service-worker-router [![ ](https://travis-ci.org/berstend/service-worker-router.svg?branch=master)](https://travis-ci.org/berstend/service-worker-router) [![ ](https://img.shields.io/npm/v/service-worker-router.svg)](https://www.npmjs.com/package/service-worker-router)
 
 > An elegant and fast URL router for service workers (and standalone use)
 
@@ -10,12 +10,12 @@ I was unable to find a modern router with the following features:
   - Most routers are intertwined with a specific web server or framework, this one is agnostic and can be used everywhere (Node.js, browsers, workers). See the [standalone](#example-standalone) example.
   - The router is used in production with [Cloudflare Workers].
 - **TypeScript** (and JavaScript) **support**
-  - Even when not using TypeScript there's the benefit of better code editor tooling (like autocomplete) for the developer.
+  - Even when not using TypeScript there's the benefit of better code editor tooling (improved IntelliSense) for the developer.
 - **Match the path or the full URL**
   - Most routers only support matching a `/path`, with service workers it's sometimes necessary to use the full URL as well.
 - **Elegant pattern matching**
   - Life's too short to debug regexes. :-)
-- Also: Lightweight (~100 LOC), tested, minimal overhead
+- Also: Lightweight (**8KB**, ~100 LOC), tested, supports [tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking) and [ES modules](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/)
 
 ## Installation
 
@@ -31,11 +31,35 @@ npm install --save service-worker-router
 // TypeScript
 import { Router, HandlerContext } from 'service-worker-router'
 
-// ES6 JavaScript and Babel
+// Modern JavaScript, Babel, Webpack, Rollup, etc.
 import { Router } from 'service-worker-router'
 
 // Legacy JavaScript and Node.js
 const { Router } = require('service-worker-router')
+
+// Inside a web/service worker
+importScripts('https://unpkg.com/service-worker-router')
+const Router = self.ServiceWorkerRouter.Router
+
+// Oldschool HTML
+<script src="https://unpkg.com/service-worker-router"></script>
+var Router = window.ServiceWorkerRouter.Router
+```
+
+#### `URL` polyfill
+
+The router is making use of the WHATWG [URL] object. If your environment is **Node < v8 or IE** (see [compat](https://caniuse.com/#feat=url)) you need to polyfill it before requiring/importing the router. By using [polyfill.io](https://polyfill.io/v2/docs/features/#URL) the shim will only be loaded if the browser needs it.
+
+```typescript
+// Add URL polyfill in Node.js < 8
+// npm i --save universal-url
+require('universal-url').shim()
+
+// Add URL polyfill in workers
+importScripts('https://cdn.polyfill.io/v2/polyfill.min.js?features=URL')
+
+// Add URL polyfill in HTML scripts
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=URL"></script>
 ```
 
 ## Example (service worker)
@@ -282,9 +306,6 @@ addEventListener('fetch', event => {
 
 - No middleware support
   - In service workers one needs to respond with a definitive [Response] object (when responding to a fetch event), so this paradigm doesn't really fit here.
-- No ES5 transpilation
-  - This module is targeting modern JavaScript environments, by purpose. If you need to use the router in older environments it's your responsibility to transpile your project (and this dependency) to e.g. ES5 using Babel.
-  - You might need to polyfill [URL] in certain environments (Node.js < 10, IE), see [compat](https://caniuse.com/#feat=url). One way to do that would be `universal-url`.
 
 ## See also
 
@@ -299,5 +320,4 @@ MIT
 [request]: https://developer.mozilla.org/en-US/docs/Web/API/Request 'Request'
 [response]: https://developer.mozilla.org/en-US/docs/Web/API/Response 'Response'
 [fetchevent]: https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent 'FetchEvent'
-[Cloudflare Workers]: https://www.cloudflare.com/products/cloudflare-workers/ 'Cloudflare Workers'
-
+[cloudflare workers]: https://www.cloudflare.com/products/cloudflare-workers/ 'Cloudflare Workers'

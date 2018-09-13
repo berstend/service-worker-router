@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import { Router } from '../src/index'
+import { Router } from '../src/router'
 
 test('should find route with wildcard', async t => {
   const router = new Router()
