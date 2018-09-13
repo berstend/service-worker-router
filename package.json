@@ -43,6 +43,7 @@
     "@types/node": "^10.9.4",
     "ava": "^0.25.0",
     "ava-ts": "^0.25.1",
+    "rimraf": "^2.6.2",
     "rollup": "^0.65.2",
     "rollup-plugin-commonjs": "^9.1.6",
     "rollup-plugin-node-resolve": "^3.4.0",
