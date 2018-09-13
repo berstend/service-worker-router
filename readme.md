@@ -41,7 +41,12 @@ const { Router } = require('service-worker-router')
 importScripts('https://unpkg.com/service-worker-router')
 const Router = self.ServiceWorkerRouter.Router
 
-// Oldschool HTML
+// HTML: Using ES modules
+<script type="module">
+  import { Router } from 'https://unpkg.com/service-worker-router/dist/router.browser.mjs';
+</script>
+
+// HTML: Oldschool
 <script src="https://unpkg.com/service-worker-router"></script>
 var Router = window.ServiceWorkerRouter.Router
 ```
