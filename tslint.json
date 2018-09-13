@@ -1,5 +1,5 @@
 {
-  "extends": ["tslint-config-standard"],
+  "extends": ["tslint-config-standard", "tslint-config-prettier"],
   "rules": {
     "space-before-function-paren": [true, "always"],
     "ordered-imports": true

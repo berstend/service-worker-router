@@ -2,28 +2,36 @@
   "name": "service-worker-router",
   "version": "1.6.1",
   "description": "An elegant and fast URL router for services workers (and standalone use)",
+  "author": "berstend",
+  "license": "MIT",
+  "repository": "berstend/service-worker-router",
+  "homepage": "https://github.com/berstend/service-worker-router#readme",
   "main": "dist/router.js",
   "module": "dist/router.mjs",
   "unpkg": "dist/router.min.js",
   "browser": {
-    "./dist/router.js": "dist/router.browser.js",
-    "./dist/router.mjs": "dist/router.browser.mjs"
+    "dist/router.js": "dist/router.browser.js",
+    "dist/router.mjs": "dist/router.browser.mjs"
   },
   "types": "dist/router.d.ts",
-  "repository": "berstend/service-worker-router",
-  "homepage": "https://github.com/berstend/service-worker-router#readme",
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "check": "tsc --pretty --noEmit",
     "check:watch": "npm run check -- --watch",
     "declarations": "tsc --emitDeclarationOnly",
-    "build": "rimraf dist && rollup -c && npm run declarations",
-    "dev": "rimraf dist && rollup -c -w && npm run declarations",
+    "prebuild": "rimraf dist",
+    "build": "rollup -c rollup.config.ts && npm run declarations",
+    "dev": "npm run prebuild && rollup -c rollup.config.ts -w && npm run declarations",
     "test": "ava-ts -v",
     "prepublish": "npm run build"
   },
-  "files": [
-    "/dist"
-  ],
+  "prettier": {
+    "printWidth": 80,
+    "semi": false,
+    "singleQuote": true
+  },
   "keywords": [
     "router",
     "service worker",
@@ -37,8 +45,6 @@
     "cloudflare worker",
     "typescript"
   ],
-  "author": "berstend",
-  "license": "MIT",
   "devDependencies": {
     "@types/node": "^10.9.4",
     "ava": "^0.25.0",
@@ -51,6 +57,7 @@
     "rollup-plugin-typescript": "^0.8.1",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
     "tslint-config-standard": "^8.0.1",
     "typescript": "^3.0.3"
   },
