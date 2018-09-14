@@ -77,8 +77,8 @@ const router = new Router()
 
 // Define user handler
 const user = async ({ request, params }) => {
-  const response = new Response(`Hello user with id ${params.id}.`)
-  response.headers.set('x-user-id', params.id)
+  const headers = new Headers({ 'x-user-id': params.id })
+  const response = new Response(`Hello user with id ${params.id}.`, { headers })
   return response
 }
 
@@ -102,13 +102,17 @@ addEventListener('fetch', event => {
 Same as the above but with optional types:
 
 ```typescript
+// Add 'webworker' to the lib property in your tsconfig.json
+// also: https://github.com/Microsoft/TypeScript/issues/14877
+declare const self: ServiceWorkerGlobalScope
+
 // Instantiate a new router
 const router = new Router()
 
 // Define user handler
 const user = async ({ request, params }: HandlerContext): Promise<Response> => {
-  const response = new Response(`Hello user with id ${params.id}.`)
-  response.headers.set('X-UserId', params.id)
+  const headers = new Headers({ 'x-user-id': params.id })
+  const response = new Response(`Hello user with id ${params.id}.`, { headers })
   return response
 }
 
@@ -121,7 +125,7 @@ router.all('/_ping', ping)
 
 // Set up service worker event listener
 // To resolve 'FetchEvent' add 'webworker' to the lib property in your tsconfig.json
-addEventListener('fetch', (event: FetchEvent) => {
+self.addEventListener('fetch', (event: FetchEvent) => {
   // Will test event.request against the defined routes
   // and use event.respondWith(handler) when a route matches
   router.watch(event)
