@@ -31,5 +31,5 @@ router.get('(http(s)\\://)api.foobar.com/hello', foobar, {
 self.addEventListener('fetch', (event: FetchEvent) => {
   // Will test event.request against the defined routes
   // and use event.respondWith(handler) when a route matches
-  router.watch(event)
+  router.handleEvent(event)
 })

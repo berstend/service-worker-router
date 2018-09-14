@@ -12,10 +12,7 @@ export type HandlerPromise = Promise<Response | any | void>
 
 export type HandlerFunction = (...args: any[]) => HandlerPromise
 
-export interface HandlerContext extends RouteResult {
-  event: FetchEvent
-  request: Request
-}
+export interface HandlerContext extends MatchResult {}
 
 export interface RouteOptions {
   method?: string
@@ -28,15 +25,18 @@ export interface Route {
   options: RouteOptions
 }
 
-export interface RouteResult {
+export interface MatchResult {
   params: any | null
   handler: HandlerFunction
   url: URL
   method: string
+  route: Route
+  request?: Request
+  event?: FetchEvent
 }
 
-export interface RequestResult {
-  route: RouteResult
+export interface HandleResult {
+  match: MatchResult
   handlerPromise: HandlerPromise
 }
 
@@ -112,39 +112,51 @@ export class Router {
     return this
   }
 
-  public findRoute (url: URL | string, method: string): RouteResult | null {
+  public match (url: URL | string, method: string): MatchResult | null {
     if (!(url instanceof URL)) {
       url = url.startsWith('/') ? new URL(`http://domain${url}`) : new URL(url)
     }
-    for (const { pattern, options, handler } of this.routes) {
+    for (const route of this.routes) {
+      const { pattern, options, handler } = route
       if (options.method && options.method !== method) continue
       const params = pattern.match(options.matchUrl ? url.href : url.pathname)
-      if (params) return { params, handler, url, method }
+      if (params) return { params, handler, url, method, route }
     }
     return null
   }
 
-  public findRouteForRequest (request: Request): RouteResult | null {
-    return this.findRoute(request.url, request.method)
+  public matchRequest (request: Request): MatchResult | null {
+    return this.match(request.url, request.method)
   }
 
-  public handleRequest (event: FetchEvent): RequestResult | null {
-    const route = this.findRouteForRequest(event.request)
-    if (!route) return null
-    const handlerPromise = route.handler({
-      ...route,
-      event,
-      request: event.request
-    } as HandlerContext)
-    return { route, handlerPromise }
+  public matchEvent (event: FetchEvent): MatchResult | null {
+    return this.matchRequest(event.request)
   }
 
-  public watch (event: FetchEvent): RequestResult | null {
-    const result = this.handleRequest(event)
-    if (!result) return null
-    const { route, handlerPromise } = result
+  public handle (url: URL | string, method: string): HandleResult | null {
+    const match = this.match(url, method)
+    if (!match) return null
+    const context = { ...match }
+    const handlerPromise = match.handler(context as HandlerContext)
+    return { handlerPromise, match: context }
+  }
+
+  public handleRequest (request: Request): HandleResult | null {
+    const match = this.matchRequest(request)
+    if (!match) return null
+    const context = { ...match, request } as HandlerContext
+    const handlerPromise = match.handler(context)
+    return { handlerPromise, match: context }
+  }
+
+  public handleEvent (event: FetchEvent): HandleResult | null {
+    const request = event.request
+    const match = this.matchRequest(request)
+    if (!match) return null
+    const context = { ...match, request, event } as HandlerContext
+    const handlerPromise = match.handler(context)
     event.respondWith(handlerPromise)
-    return { route, handlerPromise }
+    return { handlerPromise, match: context }
   }
 
   public clear () {

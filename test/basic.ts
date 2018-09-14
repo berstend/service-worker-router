@@ -18,9 +18,9 @@ test('should have the basic class members', async t => {
   t.true(instance.head instanceof Function)
   t.true(instance.options instanceof Function)
 
-  t.true(instance.findRoute instanceof Function)
-  t.true(instance.findRouteForRequest instanceof Function)
+  t.true(instance.match instanceof Function)
+  t.true(instance.matchRequest instanceof Function)
   t.true(instance.handleRequest instanceof Function)
-  t.true(instance.watch instanceof Function)
+  t.true(instance.handleEvent instanceof Function)
   t.true(instance.clear instanceof Function)
 })

@@ -93,7 +93,7 @@ router.all('/_ping', ping)
 addEventListener('fetch', event => {
   // Will test event.request against the defined routes
   // and use event.respondWith(handler) when a route matches
-  router.watch(event)
+  router.handleEvent(event)
 })
 ```
 
@@ -128,13 +128,13 @@ router.all('/_ping', ping)
 self.addEventListener('fetch', (event: FetchEvent) => {
   // Will test event.request against the defined routes
   // and use event.respondWith(handler) when a route matches
-  router.watch(event)
+  router.handleEvent(event)
 })
 ```
 
 ## Example (standalone)
 
-This router can be used on it's own using `router.findRoute`, service worker usage is optional.
+This router can be used on it's own using `router.match`, service worker usage is optional.
 
 ```js
 const router = new Router()
@@ -142,7 +142,7 @@ const router = new Router()
 const user = async () => `Hey there!`
 router.get('/user/:name', user)
 
-router.findRoute('/user/bob', 'GET')
+router.match('/user/bob', 'GET')
 // => { params: { name: 'bob' }, handler: [AsyncFunction: user],  url...
 ```
 
@@ -193,7 +193,7 @@ router.get('(http(s)\\://)(:subdomain.):domain.:tld(/*)', handler, {
   matchUrl: true
 })
 
-router.findRoute('http://mail.google.com/mail', 'GET')
+router.match('http://mail.google.com/mail', 'GET')
 // => { params: {subdomain: 'mail', domain: 'google', tld: 'com', _: 'mail'}, handler: [AsyncFunction], ...
 ```
 
@@ -237,58 +237,91 @@ const handler = async ({ request, params }) => {
 
 When used in a service worker context the handler **must** return a [Response] object, if the route matches.
 
-When used in conjunction with service worker specific helper methods like `router.handleRequest` and `router.watch` the handler function will be called automatically with an object, containing the following signature:
+When used in conjunction with helper methods like `router.handleRequest` and `router.handleEvent` the handler function will be called automatically with an object, containing the following signature:
 
 ```typescript
 interface HandlerContext {
-  event: FetchEvent
-  request: Request
   params: any | null
   handler: HandlerFunction
   url: URL
   method: string
+  route: Route
+  request?: Request
+  event?: FetchEvent
 }
 ```
 
 ## API
 
-#### router.findRoute(`url: URL | string, method: string`): `RouteResult | null`
+#### router.match(`url: URL | string, method: string`): `MatchResult | null`
 
 Matches a supplied URL and HTTP method against the registered routes. `url` can be a string (path or full URL) or [URL] instance.
 
 ```js
 router.get('/user/:id', handler)
 
-router.findRoute('/user/1337', 'GET')
+router.match('/user/1337', 'GET')
 // => { params: { id: '1337' }, handler: [AsyncFunction: handler],  url...
 ```
 
-The return value is a `RouteResult` object or `null` if no matching route was found.
+The return value is a `MatchResult` object or `null` if no matching route was found.
 
 ```typescript
-interface RouteResult {
+interface MatchResult {
   params: any | null
   handler: HandlerFunction
   url: URL
   method: string
+  route: Route
+  request?: Request
+  event?: FetchEvent
 }
 ```
 
-#### router.findRouteForRequest(`request: Request`): `RouteResult | null`
+#### router.matchRequest(`request: Request`): `MatchResult | null`
 
-Convenience function to match a [Request] object (e.g. `event.request`) against the registered routes. Will return `null` if no matching route was found.
+Will match a [Request] object (e.g. `event.request`) against the registered routes. Will return `null` or a `MatchResult` object.
 
 ```js
 addEventListener('fetch', event => {
-  const route = router.findRouteForRequest(event.request)
-  console.log(route)
+  const result = router.matchRequest(event.request)
+  console.log(result)
   // => { params: { user: 'bob' }, handler: [AsyncFunction: handler], ...
 })
 ```
 
-#### router.handleRequest(`event: FetchEvent`): `RequestResult | null`
+#### router.matchEvent(`event: FetchEvent`): `MatchResult | null`
 
-Convenience function to match a [FetchEvent] object against the registered routes and call it's handler function automatically.
+Will match a [FetchEvent] object (e.g. `event`) against the registered routes. Will return `null` or a `MatchResult` object.
+
+```js
+addEventListener('fetch', event => {
+  const result = router.matchEvent(event)
+  console.log(result)
+  // => { params: { user: 'bob' }, handler: [AsyncFunction: handler], ...
+})
+```
+
+#### router.handle(`url: URL | string, method: string`): `HandleResult | null`
+
+Will match a string or [URL] instance against the registered routes and call it's handler function automatically.
+
+```js
+const result = router.handle('/user/bob', 'GET')
+```
+
+Will return `null` or the matched route and handler promise as `HandleResult`:
+
+```typescript
+interface HandleResult {
+  match: MatchResult
+  handlerPromise: HandlerPromise
+}
+```
+
+#### router.handleRequest(`request: Request`): `HandleResult | null`
+
+Will match a [FetchEvent] object against the registered routes and call it's handler function automatically.
 
 ```js
 addEventListener('fetch', event => {
@@ -301,26 +334,19 @@ addEventListener('fetch', event => {
 })
 ```
 
-Will return `null` or the matched route and handler promise as `RequestResult`:
+Will return `null` or the matched route and handler promise as `HandleResult`.
 
-```typescript
-interface RequestResult {
-  route: RouteResult
-  handlerPromise: HandlerPromise
-}
-```
+#### router.handleEvent(`event: FetchEvent`): `HandleResult | null`
 
-#### router.watch(`event: FetchEvent`): `RequestResult | null`
-
-Convenience function to match a [FetchEvent] object against the registered routes. If a route matches it's handler will be called automatically with `event.respondWith(handler)`. If no route matches nothing happens. :-)
+Will match a [FetchEvent] object against the registered routes. If a route matches it's handler will be called automatically with `event.respondWith(handler)`. If no route matches nothing happens. :-)
 
 ```js
 addEventListener('fetch', event => {
-  router.watch(event)
+  router.handleEvent(event)
 })
 ```
 
-Will return `null` or the matched route and handler promise as `RequestResult`.
+Will return `null` or the matched route and handler promise as `HandleResult`.
 
 ## Limitations
 
