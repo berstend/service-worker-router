@@ -242,7 +242,7 @@ When used in conjunction with service worker specific helper methods like `route
 ```typescript
 interface HandlerContext {
   event: FetchEvent
-  request: FetchEvent['request']
+  request: Request
   params: any | null
   handler: HandlerFunction
   url: URL
@@ -274,7 +274,7 @@ interface RouteResult {
 }
 ```
 
-#### router.findRouteForRequest(`request: FetchEvent['request']`): `RouteResult | null`
+#### router.findRouteForRequest(`request: Request`): `RouteResult | null`
 
 Convenience function to match a [Request] object (e.g. `event.request`) against the registered routes. Will return `null` if no matching route was found.
 
@@ -286,22 +286,31 @@ addEventListener('fetch', event => {
 })
 ```
 
-#### router.handleRequest(`event: FetchEvent`): `Promise<Response | any | void> | null`
+#### router.handleRequest(`event: FetchEvent`): `RequestResult | null`
 
 Convenience function to match a [FetchEvent] object against the registered routes and call it's handler function automatically.
 
 ```js
 addEventListener('fetch', event => {
-  const handlerPromise = router.handleRequest(event)
-  if (handlerPromise) {
-    event.respondWith(handlerPromise)
+  const result = router.handleRequest(event)
+  if (result) {
+    event.respondWith(result.handlerPromise)
   } else {
     console.log('No route matched.')
   }
 })
 ```
 
-#### router.watch(`event: FetchEvent`)
+Will return `null` or the matched route and handler promise as `RequestResult`:
+
+```typescript
+interface RequestResult {
+  route: RouteResult
+  handlerPromise: HandlerPromise
+}
+```
+
+#### router.watch(`event: FetchEvent`): `RequestResult | null`
 
 Convenience function to match a [FetchEvent] object against the registered routes. If a route matches it's handler will be called automatically with `event.respondWith(handler)`. If no route matches nothing happens. :-)
 
@@ -310,6 +319,8 @@ addEventListener('fetch', event => {
   router.watch(event)
 })
 ```
+
+Will return `null` or the matched route and handler promise as `RequestResult`.
 
 ## Limitations
 

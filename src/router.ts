@@ -8,7 +8,14 @@ const patternOpts = {
   segmentValueCharset: 'a-zA-Z0-9@.+-_'
 }
 
-export type HandlerFunction = (...args: any[]) => Promise<Response | any | void>
+export type HandlerPromise = Promise<Response | any | void>
+
+export type HandlerFunction = (...args: any[]) => HandlerPromise
+
+export interface HandlerContext extends RouteResult {
+  event: FetchEvent
+  request: Request
+}
 
 export interface RouteOptions {
   method?: string
@@ -28,9 +35,9 @@ export interface RouteResult {
   method: string
 }
 
-export interface HandlerContext extends RouteResult {
-  event: FetchEvent
-  request: FetchEvent['request']
+export interface RequestResult {
+  route: RouteResult
+  handlerPromise: HandlerPromise
 }
 
 export class Router {
@@ -117,23 +124,27 @@ export class Router {
     return null
   }
 
-  public findRouteForRequest (
-    request: FetchEvent['request']
-  ): RouteResult | null {
+  public findRouteForRequest (request: Request): RouteResult | null {
     return this.findRoute(request.url, request.method)
   }
 
-  public handleRequest (
-    event: FetchEvent
-  ): Promise<Response | any | void> | null {
+  public handleRequest (event: FetchEvent): RequestResult | null {
     const route = this.findRouteForRequest(event.request)
     if (!route) return null
-    return route.handler({ ...route, event, request: event.request })
+    const handlerPromise = route.handler({
+      ...route,
+      event,
+      request: event.request
+    } as HandlerContext)
+    return { route, handlerPromise }
   }
 
-  public watch (event: FetchEvent) {
-    const handler = this.handleRequest(event)
-    if (handler) event.respondWith(handler)
+  public watch (event: FetchEvent): RequestResult | null {
+    const result = this.handleRequest(event)
+    if (!result) return null
+    const { route, handlerPromise } = result
+    event.respondWith(handlerPromise)
+    return { route, handlerPromise }
   }
 
   public clear () {
