@@ -253,6 +253,8 @@ interface HandlerContext {
 
 ## API
 
+### Match
+
 #### router.match(`url: URL | string, method: string`): `MatchResult | null`
 
 Matches a supplied URL and HTTP method against the registered routes. `url` can be a string (path or full URL) or [URL] instance.
@@ -284,8 +286,8 @@ Will match a [Request] object (e.g. `event.request`) against the registered rout
 
 ```js
 addEventListener('fetch', event => {
-  const result = router.matchRequest(event.request)
-  console.log(result)
+  const match = router.matchRequest(event.request)
+  console.log(match)
   // => { params: { user: 'bob' }, handler: [AsyncFunction: handler], ...
 })
 ```
@@ -296,15 +298,17 @@ Will match a [FetchEvent] object (e.g. `event`) against the registered routes. W
 
 ```js
 addEventListener('fetch', event => {
-  const result = router.matchEvent(event)
-  console.log(result)
+  const match = router.matchEvent(event)
+  console.log(match)
   // => { params: { user: 'bob' }, handler: [AsyncFunction: handler], ...
 })
 ```
 
+### Handle
+
 #### router.handle(`url: URL | string, method: string`): `HandleResult | null`
 
-Will match a string or [URL] instance against the registered routes and call it's handler function automatically.
+Will match a string or [URL] instance against the registered routes and call it's handler function automatically (with `HandlerContext`).
 
 ```js
 const result = router.handle('/user/bob', 'GET')
@@ -321,7 +325,7 @@ interface HandleResult {
 
 #### router.handleRequest(`request: Request`): `HandleResult | null`
 
-Will match a [FetchEvent] object against the registered routes and call it's handler function automatically.
+Will match a [FetchEvent] object against the registered routes and call it's handler function automatically (with `HandlerContext`).
 
 ```js
 addEventListener('fetch', event => {
@@ -338,7 +342,7 @@ Will return `null` or the matched route and handler promise as `HandleResult`.
 
 #### router.handleEvent(`event: FetchEvent`): `HandleResult | null`
 
-Will match a [FetchEvent] object against the registered routes. If a route matches it's handler will be called automatically with `event.respondWith(handler)`. If no route matches nothing happens. :-)
+Will match a [FetchEvent] object against the registered routes. If a route matches it's handler will be called automatically and passed to `event.respondWith(handler)`. If no route matches nothing happens. :-)
 
 ```js
 addEventListener('fetch', event => {
