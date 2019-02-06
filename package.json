@@ -13,7 +13,7 @@
     "./dist/router.js": "./dist/router.browser.js",
     "./dist/router.mjs": "./dist/router.browser.mjs"
   },
-  "types": "dist/router.d.ts",
+  "types": "dist/src/router.d.ts",
   "files": [
     "/dist"
   ],
