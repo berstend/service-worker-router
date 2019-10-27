@@ -329,7 +329,7 @@ Will match a [FetchEvent] object against the registered routes and call it's han
 
 ```js
 addEventListener('fetch', event => {
-  const result = router.handleRequest(event)
+  const result = router.handleRequest(event.request)
   if (result) {
     event.respondWith(result.handlerPromise)
   } else {
