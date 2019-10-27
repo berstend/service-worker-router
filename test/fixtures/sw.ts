@@ -26,6 +26,9 @@ router.all('/_ping', ping)
 router.get('(http(s)\\://)api.foobar.com/hello', foobar, {
   matchUrl: true
 })
+router.all('/throw', async () => {
+  throw new Error('Nope!')
+})
 
 // Set up service worker event listener
 self.addEventListener('fetch', (event: FetchEvent) => {
