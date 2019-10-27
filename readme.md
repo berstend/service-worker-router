@@ -357,6 +357,9 @@ Will return `null` or the matched route and handler promise as `HandleResult`.
 - No middleware support
   - In service workers one needs to respond with a definitive [Response] object (when responding to a fetch event), so this paradigm doesn't really fit here.
 
+## Examples
+* [Error and NotFound/404 handling (Cloudflare Worker, TypeScript)](https://github.com/berstend/service-worker-router/issues/4#issuecomment-546683448)
+
 ## See also
 
 - workbox-router
