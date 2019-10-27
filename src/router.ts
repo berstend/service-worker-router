@@ -33,6 +33,7 @@ export interface MatchResult {
   route: Route
   request?: Request
   event?: FetchEvent
+  ctx: any
 }
 
 export interface HandleResult {
@@ -42,6 +43,7 @@ export interface HandleResult {
 
 export class Router {
   private routes: Array<Route> = []
+  public ctx: any
 
   public all (
     pattern: string | UrlPattern,
@@ -120,7 +122,7 @@ export class Router {
       const { pattern, options, handler } = route
       if (options.method && options.method !== method) continue
       const params = pattern.match(options.matchUrl ? url.href : url.pathname)
-      if (params) return { params, handler, url, method, route }
+      if (params) return { params, handler, url, method, route, ctx: this.ctx }
     }
     return null
   }

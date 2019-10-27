@@ -92,3 +92,13 @@ test('will throw if a route throws', async t => {
     t.true(true)
   }
 })
+
+test('will have context', async t => {
+  const request = new Request('/info')
+  const [response] = (await self.trigger('fetch', request)) as Response[]
+
+  t.is(typeof response, 'object')
+  t.true(response instanceof Response)
+  t.is(response.status, 200)
+  t.is(await response.text(), 'Important info: 42.')
+})

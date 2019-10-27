@@ -248,6 +248,7 @@ interface HandlerContext {
   route: Route
   request?: Request
   event?: FetchEvent
+  ctx: any
 }
 ```
 
@@ -277,6 +278,7 @@ interface MatchResult {
   route: Route
   request?: Request
   event?: FetchEvent
+  ctx: any
 }
 ```
 
@@ -351,6 +353,10 @@ addEventListener('fetch', event => {
 ```
 
 Will return `null` or the matched route and handler promise as `HandleResult`.
+
+### Context (Since `v1.7.5`)
+
+You can optionally add a context (`router.ctx = { foobar: 123 }`) to the router, which will be passed on to the handlers as part of `HandlerContext`. An example (also how to do this type safe) can be found in [the test fixture](./test/fixtures/sw.ts).
 
 ## Limitations
 
