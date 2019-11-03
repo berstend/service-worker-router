@@ -1,6 +1,15 @@
+# Please note :sparkle:
+Although this router works fine I [made a new one](https://github.com/berstend/tiny-request-router), based on experiences using it in production with Cloudflare Workers.
+
+[`tiny-request-router`](https://github.com/berstend/tiny-request-router) is even smaller, even less opinionated and more flexible to use. It also uses [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp) instead of `url-pattern`, as I found it more intuitive to use. I'd recommend using the new router for new projects.
+
+---
+
+
 # service-worker-router [![ ](https://travis-ci.org/berstend/service-worker-router.svg?branch=master)](https://travis-ci.org/berstend/service-worker-router) [![ ](https://img.shields.io/npm/v/service-worker-router.svg)](https://www.npmjs.com/package/service-worker-router)
 
 > An elegant and fast URL router for service workers (and standalone use)
+
 
 ## Yet another router? 😄
 
